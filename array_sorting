@@ -22,6 +22,7 @@ function createSets(inputArray) {
   }
   
   //remove used objects from the list
+  //this will change the original input array so optionally the input could first be replicated in a new array
   for (let i = 0; i < count[1]; i++) {
     inputArray.splice(0, 1)
   }
@@ -53,4 +54,5 @@ function createSets(inputArray) {
   return result
 }
 
+//to display the items must be shown seperately. console.log(createSets) results in only the first instance of each object being show while the rest are [circular object Object]
 createSets(input).forEach(element => console.log(element));
