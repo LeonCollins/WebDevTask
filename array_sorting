@@ -1,0 +1,56 @@
+//input data. The tracker property is for testing so the results can be read and checked
+let input = [ { id: 1, tracker: '1A'}, { id: 1, tracker: '1B'}, { id: 2, tracker: '2A'}, { id: 2, tracker: '2B'}, {  id: 3, tracker: '3A'} ]
+//let input = [ { id: 1}, { id: 1}, { id: 2}, { id: 2}, {  id: 3} ]
+//let input = [ { id: 1}, { id: 1}, { id: 2} ]
+
+function createSets(inputArray) {
+  //array to be returned
+  let result = []
+  
+  //put objects in order of id so each id can be looped over easier
+  inputArray.sort((a, b) => a.id - b.id)
+  
+  //count of how many times each id is repeated so it can be looped over
+  let count = {}
+  inputArray.forEach(element => {
+    count[element.id] = (count[element.id] || 0) + 1
+  })
+  
+  //the first set of objects are added to the array seperately to create the initial sets to be added to
+  for (let i = 0; i < count[1]; i++) {
+    result.push([inputArray[i]])
+  }
+  
+  //remove used objects from the list
+  for (let i = 0; i < count[1]; i++) {
+    inputArray.splice(0, 1)
+  }
+  
+  //loop through each id
+  for (let i = 0; i < Object.keys(count).length - 1; i++) {
+    //stores the combination of the items currently in result and the next element
+    let buffer = []
+   
+    //for each set in result combine it with the next item on the input list
+    for (let j = 0; j < count[i + 2]; j++) {
+      for (let k = 0; k < result.length; k++) {
+        let set = [result[k],  inputArray[j]].flat()
+        buffer.push(set)
+      }
+    }
+    
+    //empty the result list of the old sets and copy the new ones from the buffer
+    result.length = 0
+    result.push.apply(result, buffer)
+    buffer.length = 0
+    
+    //remove used objects from the list
+    for (let j = 0; j < count[i + 2]; j++) {
+      inputArray.splice(0, 1)
+    }
+  }
+  
+  return result
+}
+
+createSets(input).forEach(element => console.log(element));
